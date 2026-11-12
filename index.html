@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17142b">
+<title>إلى أمي وأبي 🤍</title>
+<style>
+:root {
+  --bg: #17142b;
+  --panel: rgba(255,255,255,.09);
+  --text: #fffafc;
+  --muted: #e8dce8;
+  --pink: #ff8eb4;
+  --gold: #f7d58a;
+  --line: rgba(255,255,255,.18);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 15% 10%, rgba(255,142,180,.22), transparent 35%),
+    radial-gradient(ellipse at 85% 75%, rgba(139,129,255,.22), transparent 40%),
+    linear-gradient(145deg, #17142b, #30203d 55%, #17142b);
+  font-family: Tahoma, Arial, sans-serif;
+  overflow-x: hidden;
+}
+main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px 50px;
+}
+.card {
+  width: min(720px, 100%);
+  text-align: center;
+  padding: clamp(24px, 6vw, 52px);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.3);
+  backdrop-filter: blur(12px);
+  position: relative;
+}
+.eyebrow {
+  color: var(--gold);
+  letter-spacing: 2px;
+  font-size: .86rem;
+  margin-bottom: 12px;
+}
+h1 {
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  line-height: 1.35;
+  margin: 0 0 12px;
+}
+.subtitle {
+  color: var(--muted);
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  line-height: 1.9;
+  margin: 0 auto 24px;
+  max-width: 540px;
+}
+.big-heart {
+  font-size: 4rem;
+  filter: drop-shadow(0 0 24px rgba(255,142,180,.35));
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 50% { transform: scale(1.1); } }
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 22px;
+  font-weight: bold;
+  transition: transform .18s ease, filter .18s ease;
+}
+button:hover { transform: translateY(-2px); filter: brightness(1.07); }
+button:focus-visible { outline: 3px solid white; outline-offset: 4px; }
+.primary {
+  color: #321c35;
+  background: linear-gradient(100deg, #ffc3d8, #f7d58a);
+  box-shadow: 0 10px 28px rgba(255,142,180,.2);
+}
+.choices {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 18px 0 4px;
+}
+.choice {
+  background: rgba(255,255,255,.1);
+  border: 1px solid var(--line);
+  color: white;
+}
+.message {
+  margin-top: 24px;
+  padding: 22px;
+  border: 1px solid rgba(255,195,216,.32);
+  border-radius: 22px;
+  background: rgba(10,7,24,.28);
+  text-align: right;
+  line-height: 2.15;
+  font-size: 1.04rem;
+  animation: appear .45s ease both;
+}
+.message h2 { text-align: center; color: var(--gold); margin-top: 0; }
+.hidden { display: none; }
+.signature { color: #ffc3d8; text-align: center; font-weight: bold; margin-top: 16px; }
+footer { margin-top: 26px; color: #d9c9de; font-size: .82rem; }
+.float-heart {
+  position: fixed;
+  bottom: -40px;
+  pointer-events: none;
+  z-index: 0;
+  animation: rise linear forwards;
+  opacity: .72;
+}
+@keyframes rise {
+  to { transform: translateY(-115vh) rotate(24deg); opacity: 0; }
+}
+.card { z-index: 1; }
+@keyframes appear { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+<main>
+  <section class="card" aria-live="polite">
+    <div class="eyebrow">رسالة صغيرة من القلب</div>
+    <div class="big-heart" aria-hidden="true">🤍</div>
+    <h1>إلى أمي وأبي</h1>
+    <p class="subtitle">في كلام أحيانًا بنستحي نحكيه، بس اليوم حبيت أخلي قلبي يحكي عنّي…</p>
+    <button class="primary" id="openBtn">اضغطوا هنا يا أغلى الناس 💌</button>
+
+    <div class="choices hidden" id="choices">
+      <button class="choice" data-kind="mom">رسالة لأمي 🌷</button>
+      <button class="choice" data-kind="dad">رسالة لأبي 🫶</button>
+      <button class="choice" data-kind="both">رسالة إلكم الاثنين 🤍</button>
+    </div>
+
+    <article class="message hidden" id="message"></article>
+    <button class="primary hidden" id="againBtn" style="margin-top:16px">اقرؤوا الرسالة من جديد 💗</button>
+    <footer>صُنعت بكل الحب، لأنكم أغلى نعمة بحياتي ✨</footer>
+  </section>
+</main>
+<script>
+const messages = {
+  mom: {
+    title: "إلى أمي الحبيبة 🌷",
+    body: "يا أمي، مهما حكيت ومهما عبّرت، ما رح أوفيكِ حقك. شكرًا على حنانك وخوفك عليّ، وعلى كل تعب بتتعبيه عشاني حتى لو ما انتبهت لكل التفاصيل. وجودك بحياتي أمان ودفا، ودعواتك أغلى شيء عندي. سامحيني إذا قصّرت أو زعلتك يومًا، والله إني بحبك من كل قلبي، وبدي أشوفك دايمًا مبسوطة وفخورة فيّ.",
+    end: "الله يخليلي إياكِ يا أحنّ قلب 🤍"
+  },
+  dad: {
+    title: "إلى أبي الغالي 🫶",
+    body: "يا أبي، يمكن مش دايمًا بعرف أعبّر عن اللي بقلبي، بس أنا مقدّر تعبك وسهرك وكل شيء بتعمله عشانّا. شكرًا لأنك بتحاول توفر إلنا حياة أحسن، ولأنك سند وأمان إلي. إذا أحيانًا ما عبّرت أو اختلفت معك، هذا ما بغيّر أبدًا من محبتي واحترامي إلك. بتمنى أكبر وأخليك فخور فيّ، وأردّلك ولو جزء بسيط من تعبك وفضلك.",
+    end: "الله يعطيك الصحة والعافية ويطوّل بعمرك يا سندي 🤍"
+  },
+  both: {
+    title: "إلى أغلى شخصين بحياتي 🤍",
+    body: "أمي وأبي، أنتم نعمة كبيرة بحياتي، ومهما كبرت رح أضل محتاج حبكم ورضاكم ودعواتكم. بعرف إنكم بتتعبوا عشاني وبتتمنوا إلي كل خير، ويمكن ما بحكي هالكلام كل يوم، بس والله إني بحبكم أكثر مما بتتخيلوا. سامحوني على أي لحظة زعلتكم فيها، ووعد مني إني أحاول أكون أحسن، وأجتهد، وأفرّح قلبكم، وأكون سبب فخر إلكم.",
+    end: "الله يحفظكم إلي، ويجمعنا دايمًا على المحبة والفرح. بحبكم قد الدنيا كلها 💗"
+  }
+};
+const openBtn = document.getElementById('openBtn');
+const choices = document.getElementById('choices');
+const message = document.getElementById('message');
+const againBtn = document.getElementById('againBtn');
+
+openBtn.addEventListener('click', () => {
+  choices.classList.remove('hidden');
+  openBtn.textContent = 'اختاروا رسالتكم 💌';
+  openBtn.disabled = true;
+  burstHearts();
+});
+document.querySelectorAll('[data-kind]').forEach(button => {
+  button.addEventListener('click', () => {
+    const item = messages[button.dataset.kind];
+    message.innerHTML = `<h2>${item.title}</h2><p>${item.body}</p><p class="signature">${item.end}</p>`;
+    message.classList.remove('hidden');
+    againBtn.classList.remove('hidden');
+    burstHearts();
+  });
+});
+againBtn.addEventListener('click', () => {
+  message.classList.add('hidden');
+  againBtn.classList.add('hidden');
+  choices.classList.remove('hidden');
+  burstHearts();
+});
+function burstHearts() {
+  const symbols = ['🤍','💗','💖','🌷','✨'];
+  for (let i = 0; i < 16; i++) {
+    const heart = document.createElement('span');
+    heart.className = 'float-heart';
+    heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.fontSize = (16 + Math.random() * 22) + 'px';
+    heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6500);
+  }
+}
+</script>
+</body>
+</html>
